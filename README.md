@@ -7,7 +7,7 @@
 3. Используйте методы для отправки сообщений
 
 ```csharp
-PushAllApi pushAllApi = new PushAllApi(new PushAllOptions { ChannelId = xxxx, ApiKey = "d22e9f2fcdc849a8a72af065248f2acb" });
+PushAllApi pushAllApi = new PushAllApi(new PushAllOptions { ChannelId = xxxx, ApiKey = "d22e9f2fcdc8" });
 
 MulticastParameters multicastParameters = new MulticastParameters
 {
