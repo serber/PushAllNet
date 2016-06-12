@@ -6,7 +6,7 @@ using PushAll.Exceptions;
 
 namespace PushAll.Utils
 {
-    public static class HttpUtils
+    internal static class HttpUtils
     {
         public static async Task<string> SendPost(string url, IDictionary<string, string> postData)
         {
