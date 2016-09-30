@@ -4,7 +4,7 @@
 
 ### Установка
 ```
-PM> Install-Package Install-Package PushAllNet
+PM> Install-Package PushAllNet
 ```
 
 ### Использование
