@@ -1,13 +1,20 @@
 ﻿using System.Collections.Generic;
-using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using PushAll.Exceptions;
 
 namespace PushAll.Utils
 {
+    /// <summary>
+    /// Helper class for HTTP requests
+    /// </summary>
     internal static class HttpUtils
     {
+        /// <summary>
+        /// Send POST HTTP request
+        /// </summary>
+        /// <param name="url">Target url</param>
+        /// <param name="postData">POST data</param>
         public static async Task<string> SendPost(string url, IDictionary<string, string> postData)
         {
             try
@@ -23,12 +30,16 @@ namespace PushAll.Utils
                     return responseString;
                 }
             }
-            catch (WebException e)
+            catch (HttpRequestException e)
             {
                 throw new PushAllApiException(e.Message, e);
             }
         }
 
+        /// <summary>
+        /// Send GET HTTP request
+        /// </summary>
+        /// <param name="url">Target url</param>
         public static async Task<string> SendGet(string url)
         {
             try
@@ -42,7 +53,7 @@ namespace PushAll.Utils
                     return responseString;
                 }
             }
-            catch (WebException e)
+            catch (HttpRequestException e)
             {
                 throw new PushAllApiException(e.Message, e);
             }

@@ -1,14 +1,17 @@
 ﻿namespace PushAll
 {
+    /// <summary>
+    /// PushAll options model
+    /// </summary>
     public class PushAllOptions
     {
         /// <summary>
-        /// Идентификатор канала
+        /// Channel ID
         /// </summary>
         public uint ChannelId { get; set; }
 
         /// <summary>
-        /// Ключ API
+        /// API key
         /// </summary>
         public string ApiKey { get; set; }
     }
