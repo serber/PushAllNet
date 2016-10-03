@@ -7,6 +7,9 @@ using PushAll.Utils;
 
 namespace PushAll
 {
+    /// <summary>
+    /// PushAll API client implemetation
+    /// </summary>
     public sealed class PushAllApi
     {
         #region Private fields
@@ -22,25 +25,16 @@ namespace PushAll
             _options = options;
         }
 
-        /// <summary>
-        /// Oтправляет уведомление всем перечисленным подписчикам с учетом их фильтров
-        /// </summary>
         public async Task<ulong> SendMulticastAsync(MulticastParameters parameters)
         {
             return await Execute("multicast", parameters);
         }
 
-        /// <summary>
-        /// Oтправляет уведомление всем подписчикам с учетом их фильтров
-        /// </summary>
         public async Task<ulong> SendBroadcastAsync(PushParameters parameters)
         {
             return await Execute("broadcast", parameters);
         }
 
-        /// <summary>
-        /// Отправляет уведомление одному подписчику канала без учета фильтров
-        /// </summary>
         public async Task<ulong> SendUnicastAsync(UnicastParameters parameters)
         {
             return await Execute("unicast", parameters);
@@ -50,6 +44,11 @@ namespace PushAll
 
         #region Private methods
 
+        /// <summary>
+        /// Execute API request
+        /// </summary>
+        /// <param name="method">HTTP method</param>
+        /// <param name="parameters">Request parameters</param>
         private async Task<ulong> Execute(string method, Dictionary<string, string> parameters)
         {
             parameters.Add("id", _options.ChannelId.ToString());
@@ -67,6 +66,10 @@ namespace PushAll
             return ParseResponseOrThrow(responseText);
         }
 
+        /// <summary>
+        /// Parse API response or throw exception
+        /// </summary>
+        /// <param name="response">API response text</param>
         private ulong ParseResponseOrThrow(string response)
         {
             Dictionary<string, string> responseDictionary = JsonConvert.DeserializeObject<Dictionary<string, string>>(response);

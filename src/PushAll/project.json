@@ -1,0 +1,34 @@
+﻿{
+  "version": "1.0.1",
+  "title": "PushAllNet",
+  "description": "PushAll API for .Net",
+  "authors": [ "Albert Zakiev" ],
+
+  "packOptions": {
+    "tags": [ "tasks", "queue" ],
+    "projectUrl": "https://github.com/serber/PushAllNet",
+    "licenseUrl": "https://github.com/serber/PushAllNet/blob/master/LICENSE",
+    "owners": [ "Albert Zakiev" ],
+    "requireLicenseAcceptance": false,
+    "summary": "Implements PushAll API for .Net"
+  },
+
+  "buildOptions": {
+    "warningsAsErrors": true,
+    "nowarn": [ "CS1591" ],
+    "xmlDoc": true
+  },
+
+
+  "dependencies": {
+    "NETStandard.Library": "1.6.0",
+    "Newtonsoft.Json": "9.0.1"
+  },
+
+  "frameworks": {
+    "net451": {},
+    "netstandard1.3": {
+      "imports": "dnxcore50"
+    }
+  }
+}
