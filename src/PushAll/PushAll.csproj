@@ -1,0 +1,35 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <Description>PushAll API for .Net</Description>
+    <AssemblyTitle>PushAllNet</AssemblyTitle>
+    <Version>1.0</Version>
+    <Authors>Albert Zakiev</Authors>
+    <TargetFrameworks>net451;net461;netstandard1.6;netstandard2.0</TargetFrameworks>
+    <NoWarn>$(NoWarn);CS1591</NoWarn>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <AssemblyName>PushAllNet</AssemblyName>
+    <PackageId>PushAllNet</PackageId>
+    <PackageTags>tasks;queue</PackageTags>
+    <PackageProjectUrl>https://github.com/serber/PushAllNet</PackageProjectUrl>
+    <PackageLicenseUrl>https://github.com/serber/PushAllNet/blob/master/LICENSE</PackageLicenseUrl>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
+  </ItemGroup>
+
+  <ItemGroup Condition=" '$(TargetFramework)' == 'net451' ">
+    <Reference Include="System" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Net.Http" />
+  </ItemGroup>
+
+  <ItemGroup Condition=" '$(TargetFramework)' == 'net461' ">
+    <Reference Include="System" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Net.Http" />
+  </ItemGroup>
+
+</Project>
