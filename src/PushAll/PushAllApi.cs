@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using PushAll.Exceptions;
 using PushAll.Models;
 using PushAll.Utils;
@@ -58,9 +60,18 @@ namespace PushAll
             string responseText = await HttpUtils.SendPost(Constants.ApiHost, parameters);
 
             /* 
-             {"success":1,"unfilt":1,"all":1,"lid":1635732,"status":"Run in background"}
-
-             {"error":"wrong key"}
+                {
+                   "ttl":2160000,
+                   "unfuid":[],
+                   "filtuid":[],
+                   "benchmark":{
+                      "start":"0.98532600 1522866444"
+                   },
+                   "success":1,
+                   "sl":"a2c46a55be",
+                   "lid":15436094,
+                   "status":"Run in background"
+                }
             */
 
             return ParseResponseOrThrow(responseText);
@@ -72,22 +83,27 @@ namespace PushAll
         /// <param name="response">API response text</param>
         private ulong ParseResponseOrThrow(string response)
         {
-            Dictionary<string, string> responseDictionary = JsonConvert.DeserializeObject<Dictionary<string, string>>(response);
+            JObject jobject = JsonConvert.DeserializeObject<JObject>(response);
 
-            if (responseDictionary.ContainsKey("lid"))
+            if (jobject.TryGetValue("success", StringComparison.OrdinalIgnoreCase, out JToken successToken))
             {
-                ulong lid;
-                if (ulong.TryParse(responseDictionary["lid"], out lid))
+                bool success = successToken.Value<bool>();
+                if (success)
                 {
-                    return lid;
+                    if (jobject.TryGetValue("lid", StringComparison.OrdinalIgnoreCase, out JToken lidToken))
+                    {
+                        return lidToken.Value<ulong>();
+                    }
+                }
+                else
+                {
+                    if (jobject.TryGetValue("error", StringComparison.OrdinalIgnoreCase, out JToken errorToken))
+                    {
+                        throw new PushAllApiException(errorToken.Value<string>());
+                    }
                 }
             }
-
-            if (responseDictionary.ContainsKey("error"))
-            {
-                throw new PushAllApiException(responseDictionary["error"]);
-            }
-
+            
             throw new PushAllApiException("Unkown error");
         }
 
