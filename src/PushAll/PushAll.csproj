@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Description>PushAll API for .Net</Description>
     <AssemblyTitle>PushAllNet</AssemblyTitle>
-    <Version>1.1</Version>
+    <Version>1.0</Version>
     <Authors>Albert Zakiev</Authors>
     <TargetFrameworks>net461;net471;net472;netstandard1.6;netstandard2.0;netcoreapp3.0</TargetFrameworks>
     <NoWarn>$(NoWarn);CS1591</NoWarn>
