@@ -1,4 +1,5 @@
 ﻿using PushAll.Models;
+using System.Threading.Tasks;
 
 namespace PushAll
 {
@@ -10,16 +11,16 @@ namespace PushAll
         /// <summary>
         /// Send multicast PUSH notification
         /// </summary>
-        ulong SendMulticastAsync(MulticastParameters parameters);
+        Task<ulong> SendMulticastAsync(MulticastParameters parameters);
 
         /// <summary>
         /// Send broadcast PUSH notification
         /// </summary>
-        ulong SendBroadcastAsync(PushParameters parameters);
+        Task<ulong> SendBroadcastAsync(PushParameters parameters);
 
         /// <summary>
         /// Send unicast PUSH notification
         /// </summary>
-        ulong SendUnicastAsync(UnicastParameters parameters);
+        Task<ulong> SendUnicastAsync(UnicastParameters parameters);
     }
 }

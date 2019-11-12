@@ -8,7 +8,7 @@ namespace PushAll.Models
     /// </summary>
     public class PushParameters
     {
-        #region C-tor
+        private const ulong DefaultTtl = 25 * 24 * 60 * 60;
 
         /// <summary>
         /// Create instance <see cref="PushParameters"/>
@@ -16,12 +16,7 @@ namespace PushAll.Models
         public PushParameters()
         {
             Priority = PushPriority.Default;
-            Ttl = Constants.DefaultTtl;
         }
-
-        #endregion
-
-        #region Public properties
 
         /// <summary>
         /// PUSH message title
@@ -53,10 +48,6 @@ namespace PushAll.Models
         /// </summary>
         public ulong Ttl { get; set; }
 
-        #endregion
-
-        #region Public methods
-
         /// <summary>
         /// Converts <see cref="PushParameters"/> to dictionary
         /// </summary>
@@ -70,21 +61,27 @@ namespace PushAll.Models
             };
 
             if (!string.IsNullOrEmpty(parameters.Icon))
+            {
                 parametersDictionary.Add("icon", parameters.Icon);
+            }
 
             if (!string.IsNullOrEmpty(parameters.Url))
+            {
                 parametersDictionary.Add("url", parameters.Url);
+            }
 
             parametersDictionary.Add("priority", ((int)parameters.Priority).ToString());
 
             if (parameters.Ttl > 0)
+            {
                 parametersDictionary.Add("ttl", parameters.Ttl.ToString());
+            }
             else
-                parametersDictionary.Add("ttl", Constants.DefaultTtl.ToString());
+            {
+                parametersDictionary.Add("ttl", DefaultTtl.ToString());
+            }
 
             return parametersDictionary;
         }
-        
-        #endregion
     }
 }

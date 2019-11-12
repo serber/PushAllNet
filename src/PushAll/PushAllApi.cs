@@ -1,50 +1,48 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Net.Http;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using PushAll.Exceptions;
 using PushAll.Models;
-using PushAll.Utils;
 
 namespace PushAll
 {
     /// <summary>
     /// PushAll API client implemetation
     /// </summary>
-    public sealed class PushAllApi
+    public sealed class PushAllApi : IPushAllApi
     {
-        #region Private fields
-
+        /// <summary>
+        /// API host url
+        /// </summary>
+        private const string ApiHost = "https://pushall.ru/api.php";
+        
         private readonly PushAllOptions _options;
-
-        #endregion
-
-        #region Public methods
-
+        
         public PushAllApi(PushAllOptions options)
         {
             _options = options;
         }
 
+        /// <inheritdoc cref="IPushAllApi.SendMulticastAsync(MulticastParameters)"/>
         public async Task<ulong> SendMulticastAsync(MulticastParameters parameters)
         {
             return await Execute("multicast", parameters);
         }
 
+        /// <inheritdoc cref="IPushAllApi.SendBroadcastAsync(PushParameters)"/>
         public async Task<ulong> SendBroadcastAsync(PushParameters parameters)
         {
             return await Execute("broadcast", parameters);
         }
 
+        /// <inheritdoc cref="IPushAllApi.SendUnicastAsync(UnicastParameters)"/>
         public async Task<ulong> SendUnicastAsync(UnicastParameters parameters)
         {
             return await Execute("unicast", parameters);
         }
-
-        #endregion
-
-        #region Private methods
 
         /// <summary>
         /// Execute API request
@@ -57,8 +55,26 @@ namespace PushAll
             parameters.Add("key", _options.ApiKey);
             parameters.Add("type", method);
 
-            string responseText = await HttpUtils.SendPost(Constants.ApiHost, parameters);
+            using (HttpClient client = new HttpClient())
+            {
+                FormUrlEncodedContent content = new FormUrlEncodedContent(parameters);
 
+                HttpResponseMessage responseMessage = await client.PostAsync(ApiHost, content);
+
+                responseMessage.EnsureSuccessStatusCode();
+
+                var responseText = await responseMessage.Content.ReadAsStringAsync();
+
+                return ParseResponseOrThrow(responseText);
+            }
+        }
+
+        /// <summary>
+        /// Parse API response or throw exception
+        /// </summary>
+        /// <param name="response">API response text</param>
+        private ulong ParseResponseOrThrow(string response)
+        {
             /* 
                 {
                    "ttl":2160000,
@@ -74,15 +90,6 @@ namespace PushAll
                 }
             */
 
-            return ParseResponseOrThrow(responseText);
-        }
-
-        /// <summary>
-        /// Parse API response or throw exception
-        /// </summary>
-        /// <param name="response">API response text</param>
-        private ulong ParseResponseOrThrow(string response)
-        {
             JObject jobject = JsonConvert.DeserializeObject<JObject>(response);
 
             if (jobject.TryGetValue("success", StringComparison.OrdinalIgnoreCase, out JToken successToken))
@@ -106,7 +113,5 @@ namespace PushAll
             
             throw new PushAllApiException("Unkown error");
         }
-
-        #endregion
     }
 }
